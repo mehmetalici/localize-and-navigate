@@ -10,7 +10,7 @@ An object detection and relative navigation scheme for our custom robot on Gazeb
     
     Install them via,
     ``` 
-    sudo apt-get install ros-melodic-costmap-2d ros-melodic-robot-localization ros-melodic-yocs-cmd-vel-mux ros-melodic-effort-controllers ros-melodic-navigation ros-melodic-geometry2 ros-melodic-nmea-msgs ros-melodic-bfl
+    sudo apt-get install ros-melodic-costmap-2d ros-melodic-robot-localization ros-melodic-yocs-cmd-vel-mux ros-melodic-effort-controllers ros-melodic-navigation ros-melodic-geometry2 ros-melodic-nmea-msgs ros-melodic-bfl ros-melodic-arbotix-python
     ```
 
 3. SDL Library Dependencies
