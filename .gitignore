@@ -1,6 +1,7 @@
 devel/
 logs/
 build/
+bin/
 lib/
 msg_gen/
 srv_gen/
@@ -48,13 +49,3 @@ qtcreator-*
 
 # Catkin custom files
 CATKIN_IGNORE
-
-.vscode/
-
-**/cocoapi/
-**/TensorFlow/
-**/src/models/
-**/src/imgs/
-**/src/models_px/
-**/src/data/
-data/models
