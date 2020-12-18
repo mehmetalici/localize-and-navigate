@@ -31,40 +31,21 @@ An object detection and relative navigation scheme for our custom robot on Gazeb
     cd ~/navi_ws/src
     git clone https://github.com/mehmetalici/localize-and-navigate.git
     ```
-3. Add the following line,
-    ``` 
-    #include <tf/transform_listener.h> 
-    ``` 
-    to the file segway_assisted_teleop/src/segway_assisted_teleop.h.
 
-4. Convert `PLUGINLIB_DECLARE_CLASS` to `PLUGINLIB_DECLARE_CLASS` following [this link](http://docs.ros.org/en/jade/api/pluginlib/html/class__list__macros_8h.html).
+3. Convert `PLUGINLIB_DECLARE_CLASS` to `PLUGINLIB_DECLARE_CLASS` following [this link](http://docs.ros.org/en/jade/api/pluginlib/html/class__list__macros_8h.html).
 
-5. Implement our robot and world:    
-    First change to the workspace root directory,
-    ``` 
-    cd ~/navi_ws/src
-    ``` 
-    Swap the robot's URDF by,
-    ``` 
-    mv robot/urdf/rmp.urdf.xacro segway_v3/segway_description/urdf/RMP_220/rmp.urdf.xacro
-    ``` 
-    Swap the world by,
-    ``` 
-    mv robot/worlds/example.world segway_v3_simulator/segway_gazebo/worlds/example.world
-    ``` 
-
-6. Build the packages in the workspace,
+4. Build the packages in the workspace,
     ``` 
     cd ~/navi_ws
     catkin_make
     ``` 
-7. Source the workspace and the robot,
+5. Source the workspace and the robot,
     ``` 
     cd ~/navi_ws
     source devel/setup.bash
     source src/segway_v3/segway_v3_config/std_configs/segway_config_RMP_220.bash
     ``` 
-8. Test the installation running,
+6. Test the installation running,
     ``` 
     roslaunch segway_gazebo segway_empty_world.launch
     ``` 
