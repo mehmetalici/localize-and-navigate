@@ -1,4 +1,4 @@
-# Widowx Turret Gazebo Bringup
+# Widowx Turret on Gazebo 
 A tutorial to bring-up Pan-Tilt Turret on ROS Melodic and Gazebo.
 ![](tilt.gif)
 ## Getting Started
