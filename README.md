@@ -29,17 +29,17 @@ An object detection and relative navigation scheme for our custom robot on Gazeb
 2. Clone the repository to the workspace,
     ``` 
     cd ~/navi_ws/src
-    git clone repo
+    git clone https://github.com/mehmetalici/localize-and-navigate.git
     ```
 3. Add the following line,
     ``` 
     #include <tf/transform_listener.h> 
     ``` 
-    to `segway_assisted_teleop/src/segway_assisted_teleop.h`.
+    to the file segway_assisted_teleop/src/segway_assisted_teleop.h.
 
 4. Convert `PLUGINLIB_DECLARE_CLASS` to `PLUGINLIB_DECLARE_CLASS` following [this link](http://docs.ros.org/en/jade/api/pluginlib/html/class__list__macros_8h.html).
 
-5. Swap the default configurations with our customized ones:    
+5. Implement our robot and world:    
     First change to the workspace root directory,
     ``` 
     cd ~/navi_ws/src
