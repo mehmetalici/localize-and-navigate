@@ -37,7 +37,7 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
     <xacro:include filename="$(find segway_description)/urdf/segway_components/payload_mount.urdf.xacro" />
     <xacro:include filename="$(find segway_description)/urdf/segway_components/ui_box.urdf.xacro" />
     <xacro:include filename="$(find segway_description)/urdf/accessories.urdf.xacro" />
-    <xacro:include filename="$(find widowx_turret_description)/urdf/widowx_turret.urdf.xacro"/> 
+    <!----> <xacro:include filename="$(find widowx_turret_description)/urdf/widowx_turret.urdf.xacro"/>  
 
     <xacro:property name="M_PI" value="3.14159"/>
     
@@ -328,11 +328,11 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
 
 
 
-  <!-- # ZED ######################################################################################  -->
+  <!-- # ZED ###################################################################################### -->
    <xacro:include filename="$(find zed_description)/urdf/zed_descr.urdf.xacro"/>  
    <xacro:stereolabs_camera parent="kafa_link">
 	 <origin xyz="-0.005 -0.067 1.225" rpy="3.14 3.06 1.62" />
-   </xacro:stereolabs_camera>  
+   </xacro:stereolabs_camera>   
      
     </xacro:macro>
 
