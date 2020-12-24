@@ -327,7 +327,6 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
   </xacro:VLP-16>
 
 
-
   <!-- # ZED ###################################################################################### -->
    <xacro:include filename="$(find zed_description)/urdf/zed_descr.urdf.xacro"/>  
    <xacro:stereolabs_camera parent="kafa_link">
