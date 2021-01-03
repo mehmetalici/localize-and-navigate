@@ -51,3 +51,6 @@ qtcreator-*
 CATKIN_IGNORE
 
 .vscode/
+TensorFlow/
+cocoapi/
+obj_detection/src/models
