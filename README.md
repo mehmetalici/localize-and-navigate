@@ -43,7 +43,7 @@ An object detection and relative navigation scheme for our custom robot on Gazeb
     ``` 
     cd ~/navi_ws
     source devel/setup.bash
-    source src/segway_v3/segway_v3_config/std_configs/segway_config_RMP_220.bash
+    source src/localize-and-navigate/segway_v3/segway_v3_config/std_configs/segway_config_RMP_220.bash
     ``` 
 6. Test the installation running,
     ``` 
