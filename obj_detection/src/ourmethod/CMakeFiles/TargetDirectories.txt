@@ -1,0 +1,4 @@
+/home/malici/navi_ws/src/localize-and-navigate/obj_detection/src/ourmethod/CMakeFiles/rebuild_cache.dir
+/home/malici/navi_ws/src/localize-and-navigate/obj_detection/src/ourmethod/CMakeFiles/edit_cache.dir
+/home/malici/navi_ws/src/localize-and-navigate/obj_detection/src/ourmethod/CMakeFiles/Hello.dir
+/home/malici/navi_ws/src/localize-and-navigate/obj_detection/src/ourmethod/CMakeFiles/helloDemo.dir

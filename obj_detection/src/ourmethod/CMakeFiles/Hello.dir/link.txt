@@ -1,0 +1,2 @@
+/usr/bin/ar qc libHello.a  CMakeFiles/Hello.dir/ground_segmentation.cpp.o CMakeFiles/Hello.dir/lidar_seg.cpp.o CMakeFiles/Hello.dir/segmentation_main.cpp.o
+/usr/bin/ranlib libHello.a
