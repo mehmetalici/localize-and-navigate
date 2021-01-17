@@ -70,9 +70,6 @@ def run_inference_for_single_image(model, image):
      
   return output_dict
 
-
-
-
 def show_inference(model, frame):
     #take the frame from webcam feed and convert that to array
     image_np = np.array(frame)
@@ -101,7 +98,7 @@ while True:
     re,frame = video_capture.read()
     Imagenp=show_inference(detection_model, frame)
     cv2.imshow('object detection', cv2.resize(Imagenp, (800,600)))
-    if cv2.waitKey(1) &amp; 0xFF == ord('q'):
+    if cv2.waitKey(1) and 0xFF == ord('q'):
         break
 video_capture.release()
 cv2.destroyAllWindows()

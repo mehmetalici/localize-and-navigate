@@ -2,8 +2,7 @@ cmake_minimum_required(VERSION 3.0.2)
 project(obj_detection)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
-# add_compile_options(-std=c++11)
-
+add_compile_options(-std=c++14)
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
@@ -107,10 +106,10 @@ find_package(PCL REQUIRED)
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-  INCLUDE_DIRS src/ourmethod
-  LIBRARIES obj_detection
+  INCLUDE_DIRS include
+  LIBRARIES RGBDsegment
   CATKIN_DEPENDS cv_bridge image_transport roscpp sensor_msgs std_msgs
-  ##DEPENDS system_lib
+  DEPENDS system_lib
 )
 
 ###########
@@ -120,13 +119,47 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
+    include
     ${catkin_INCLUDE_DIRS}
     ${OpenCV_INCLUDE_DIRS}
     ${PCL_INCLUDE_DIRS}
   )
 
- add_executable(segment src/ourmethod/segmentation_main.cpp src/ourmethod/ground_segmentation.cpp src/ourmethod/lidar_seg.cpp)
- target_link_libraries(segment ${catkin_LIBRARIES} ${OpenCV_LIBRARIES} ${PCL_LIBRARIES})
+ add_executable(detect 
+                src/detect_ppl_ground_plane.cpp 
+                src/helpers.cpp) 
+target_link_libraries(detect ${catkin_LIBRARIES} ${OpenCV_LIBRARIES} ${PCL_LIBRARIES})
+
+ add_executable(segmentation
+                src/segmentation.cpp 
+                src/helpers.cpp) 
+target_link_libraries(segmentation ${catkin_LIBRARIES} ${OpenCV_LIBRARIES} ${PCL_LIBRARIES})
+
+
+ add_executable(extract 
+                src/extract_indicies.cpp 
+                src/helpers.cpp) 
+target_link_libraries(extract ${catkin_LIBRARIES} ${OpenCV_LIBRARIES} ${PCL_LIBRARIES})
+
+ add_executable(correspondence 
+                src/correspondence_grouping.cpp 
+                src/helpers.cpp) 
+target_link_libraries(correspondence ${catkin_LIBRARIES} ${OpenCV_LIBRARIES} ${PCL_LIBRARIES})
+
+ add_executable(tracking 
+                src/tracking.cpp 
+                src/helpers.cpp) 
+target_link_libraries(tracking ${catkin_LIBRARIES} ${OpenCV_LIBRARIES} ${PCL_LIBRARIES})
+
+ add_executable(save 
+                src/detect_rgbd_pc.cpp 
+                src/helpers.cpp) 
+target_link_libraries(save ${catkin_LIBRARIES} ${OpenCV_LIBRARIES} ${PCL_LIBRARIES})
+
+ add_executable(visualize_pc
+                src/visualize_pc.cpp) 
+
+target_link_libraries(visualize_pc ${catkin_LIBRARIES} ${OpenCV_LIBRARIES} ${PCL_LIBRARIES})
 
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
