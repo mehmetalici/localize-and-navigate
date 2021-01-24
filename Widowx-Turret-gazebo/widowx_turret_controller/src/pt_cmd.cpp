@@ -1,10 +1,10 @@
 #include "ros/ros.h"
 #include "std_msgs/Float64.h"
-
+#include <iostream>
 #include <sstream>
 
-#define CAM_WIDTH 768
-#define CAM_HEIGHT 1024
+#define CAM_WIDTH 640
+#define CAM_HEIGHT 480
 #define PI 3.14
 #define RX_LIM PI / 3.6
 #define RY_LIM PI / 3.6
@@ -18,12 +18,13 @@ float current_rx = 0, current_ry = 0;
 float calcRef(float target, float *current_r, int maxRes, float r_lim, bool is_reflected){
     float center = maxRes / 2;
     float diff = target - center;
-    float new_r = (diff + maxRes / 2) / (maxRes) * r_lim - r_lim / 2;
+    float new_r = (diff + center) / (maxRes) * r_lim - r_lim / 2;
     if (is_reflected){
         new_r = -new_r;
     }
     new_r += *current_r;
     *current_r = new_r;
+    std::cout << *current_r;
     return new_r;
 }
 
@@ -45,14 +46,15 @@ int main(int argc, char **argv){
     ros::init(argc, argv, "pt_cmd");
 
     ros::NodeHandle nh;
-
     
-    panRefPub = nh.advertise<std_msgs::Float64>("/pan_controller/command", 10);
-    tiltRefPub = nh.advertise<std_msgs::Float64>("/tilt_controller/command", 10);
+    panRefPub = nh.advertise<std_msgs::Float64>("/pan_controller/command", 1);
+    tiltRefPub = nh.advertise<std_msgs::Float64>("/tilt_controller/command", 1);
 
-    ros::Subscriber targetXSub = nh.subscribe("targetX", 10, targetXCb);
-    ros::Subscriber targetYSub = nh.subscribe("targetY", 10, targetYCb);
+    ros::Subscriber targetXSub = nh.subscribe("targetX", 1, targetXCb);
+    ros::Subscriber targetYSub = nh.subscribe("targetY", 1, targetYCb);
 
-    ros::spin();
+    while (true){
+        ros::spinOnce();
+    }
     
 }

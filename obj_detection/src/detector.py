@@ -1,5 +1,6 @@
 import rospy
 from sensor_msgs import msg
+from std_msgs.msg import Float64
 import tensorflow as tf
 import os
 from object_detection.utils import label_map_util
@@ -33,7 +34,8 @@ class Detector:
         self.category_index = get_label_map_data()
         self.obj = self.get_obj_as_dict(obj_to_detect)
         self.detect_fn = load_model()
-        self.pub = rospy.Publisher("/rgb_with_dets", msg.Image, queue_size=50)
+        self.img_pub = rospy.Publisher("/rgb_with_dets", msg.Image, queue_size=50)
+        self.box_pubs = [rospy.Publisher(name, Float64, queue_size=1) for name in ["targetX", "targetY"]]
         self.new_img_arrived = False
         self.image = None
         self.bridge = CvBridge()
@@ -42,6 +44,11 @@ class Detector:
         self.tracker = get_tracker(tracker_name)
         self.width = None
         self.height = None
+        self.calibration_max = 1
+        self.calibration_cnt = 0
+        self.last_target_loc = None
+        self.pred_interval = 10
+        self.pred_cnt = 0
 
     def get_obj_as_dict(self, obj_to_detect):
         for k, v in self.category_index.items():
@@ -52,7 +59,10 @@ class Detector:
     def get_detections(self):
         input_tensor = tf.convert_to_tensor(self.image)
         input_tensor = input_tensor[tf.newaxis, ...]
+        start_time = time.time()
         detections = self.detect_fn(input_tensor)
+        end_time = time.time()
+        print(f"Inference took {end_time-start_time} seconds.")
         num_detections = int(detections.pop('num_detections'))
         detections = {key: value[0, :num_detections].numpy()
                     for key, value in detections.items()}
@@ -71,22 +81,22 @@ class Detector:
 
         return np.array([x1, y1, width, height])
 
-    def convert_norm_wywh_to_rel(self, box):
+    def convert_norm_xywh_to_rel(self, box):
         x1, y1, width, height = [b for b in box]
         x2 = x1 + width
         y2 = y1 + height
         return np.array([y1/self.height, x1/self.width, y2/self.height, x2/self.width])
 
 
-    def draw_box_to_img(self, show_score=True):
+    def draw_obj_to_img(self, obj, show_score=True):
         score = None
         if show_score:
-            score = np.array([self.obj["score"]])
+            score = np.array([obj["score"]])
         image_copy = self.image.copy()
         viz_utils.visualize_boxes_and_labels_on_image_array(
             image_copy,
-            np.expand_dims(self.obj["box"], axis=0),
-            np.array([self.obj["id"]]),
+            np.expand_dims(obj["box"], axis=0),
+            np.array([obj["id"]]),
             score,
             self.category_index,
             use_normalized_coordinates=True,
@@ -128,37 +138,54 @@ class Detector:
             detections = self.get_detections()
             if self.got_object(detections):
                 print("Found object with box {}".format(self.obj["box"]))
-                image_w_box = self.draw_box_to_img()
-                self.publish(image_w_box)
-                self.tracker.init(self.image, self.convert_rel_to_norm_xywh(self.obj["box"])) 
-                self.mode = "TRACK"
+                self.calibration_cnt += 1
+                #print("Waiting {}%".format(int(self.calibration_cnt/self.calibration_max*100)))
+                if self.calibration_cnt == self.calibration_max:
+                    self.calibration_cnt = 0
+                    image_w_box = self.draw_obj_to_img(self.obj)
+                    self.publish_img(image_w_box)
+                    self.tracker.init(self.image, self.convert_rel_to_norm_xywh(self.obj["box"])) 
+                    self.mode = "TRACK"
             else:
                 print("Could not find the object. Searching...")
+                self.calibration_cnt = 0
         if self.mode == "TRACK":
-            self.track()
+            ok = self.track()
+            if ok:
+                image_with_box = self.draw_obj_to_img(self.obj, show_score=False)
+                self.publish_img(image_with_box)
+                self.publish_box_center(self.convert_rel_to_norm_xywh(self.obj["box"]))
+                self.pred_cnt += 1
+                if self.pred_cnt == self.pred_interval:
+                    self.pred_cnt = 0
+                    self.mode = "SEARCH"
+            else:
+                print("Tracking failure.")
             #opencv api
             #derinlik
             print("Tracking the object {} at {}".format(self.obj["name"], self.obj["box"]))
     
-    def publish(self, image):
+    def publish_img(self, image):
         output_img_msg = self.bridge.cv2_to_imgmsg(image)
-        self.pub.publish(output_img_msg)
+        self.img_pub.publish(output_img_msg)
+
+    def publish_box_center(self, box):
+        center_x = box[0] + box[2] / 2
+        center_y = box[1] + box[3] / 2
+        centers = [center_x, center_y]
+        for p, c in zip(self.box_pubs, centers):
+            p.publish(c)
+            pass
+            
+        print(f"center X: {center_x}\n centerY: {center_y}")
 
     def track(self):
         timer = cv2.getTickCount()
         ok, bbox = self.tracker.update(self.image)
-        self.obj["box"] = self.convert_norm_wywh_to_rel(bbox)
-        fps = cv2.getTickFrequency() / (cv2.getTickCount() - timer)
-        if ok:
-            image_with_box = self.draw_box_to_img(show_score=False)
-            self.publish(image_with_box)
-            #print(f"FPS: {fps}")
-        else:
-            print("Tracking failure.")
+        self.obj["box"] = self.convert_norm_xywh_to_rel(bbox)
+        # fps = cv2.getTickFrequency() / (cv2.getTickCount() - timer)
+        return ok
         
-
-
-
 
 def load_model():
     print('Loading model...', end='')

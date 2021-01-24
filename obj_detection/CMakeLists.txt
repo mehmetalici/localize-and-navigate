@@ -125,41 +125,8 @@ include_directories(
     ${PCL_INCLUDE_DIRS}
   )
 
- add_executable(detect 
-                src/detect_ppl_ground_plane.cpp 
-                src/helpers.cpp) 
-target_link_libraries(detect ${catkin_LIBRARIES} ${OpenCV_LIBRARIES} ${PCL_LIBRARIES})
+ 
 
- add_executable(segmentation
-                src/segmentation.cpp 
-                src/helpers.cpp) 
-target_link_libraries(segmentation ${catkin_LIBRARIES} ${OpenCV_LIBRARIES} ${PCL_LIBRARIES})
-
-
- add_executable(extract 
-                src/extract_indicies.cpp 
-                src/helpers.cpp) 
-target_link_libraries(extract ${catkin_LIBRARIES} ${OpenCV_LIBRARIES} ${PCL_LIBRARIES})
-
- add_executable(correspondence 
-                src/correspondence_grouping.cpp 
-                src/helpers.cpp) 
-target_link_libraries(correspondence ${catkin_LIBRARIES} ${OpenCV_LIBRARIES} ${PCL_LIBRARIES})
-
- add_executable(tracking 
-                src/tracking.cpp 
-                src/helpers.cpp) 
-target_link_libraries(tracking ${catkin_LIBRARIES} ${OpenCV_LIBRARIES} ${PCL_LIBRARIES})
-
- add_executable(save 
-                src/detect_rgbd_pc.cpp 
-                src/helpers.cpp) 
-target_link_libraries(save ${catkin_LIBRARIES} ${OpenCV_LIBRARIES} ${PCL_LIBRARIES})
-
- add_executable(visualize_pc
-                src/visualize_pc.cpp) 
-
-target_link_libraries(visualize_pc ${catkin_LIBRARIES} ${OpenCV_LIBRARIES} ${PCL_LIBRARIES})
 
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}

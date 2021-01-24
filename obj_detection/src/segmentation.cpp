@@ -11,11 +11,7 @@
 int main (int argc, char** argv)
 {
   pcl::PointCloud <pcl::PointXYZ>::Ptr cloud (new pcl::PointCloud <pcl::PointXYZ>);
-  if ( pcl::io::loadPCDFile <pcl::PointXYZ> (argv, *cloud) == -1 )
-  {
-    std::cout << "Cloud reading failed." << std::endl;
-    return (-1);
-  }
+
 
   pcl::IndicesPtr indices (new std::vector <int>);
   pcl::PassThrough<pcl::PointXYZ> pass;
@@ -52,6 +48,5 @@ int main (int argc, char** argv)
   while (!viewer.wasStopped ())
   {
   }
-
   return (0);
 }
