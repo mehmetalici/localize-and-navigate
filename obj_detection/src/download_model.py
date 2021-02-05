@@ -53,7 +53,7 @@ import urllib.request
 
 # Download and extract model
 MODEL_DATE = '20200711'
-MODEL_NAME = 'ssd_mobilenet_v2_fpnlite_320x320_coco17_tpu-8'
+MODEL_NAME = 'ssd_mobilenet_v2_320x320_coco17_tpu-8'
 MODEL_TAR_FILENAME = MODEL_NAME + '.tar.gz'
 MODELS_DOWNLOAD_BASE = 'http://download.tensorflow.org/models/object_detection/tf2/'
 MODEL_DOWNLOAD_LINK = MODELS_DOWNLOAD_BASE + MODEL_DATE + '/' + MODEL_TAR_FILENAME

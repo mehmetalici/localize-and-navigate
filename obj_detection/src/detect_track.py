@@ -25,7 +25,8 @@ def main():
     args = parse_args()
     detector = Detector(args.object)
     rospy.init_node("detector_rgb")
-    sub = rospy.Subscriber("/zed/color/image_raw", msg.Image, callback=detector.rgb_cb)
+    rospy.Subscriber("/zed/color/image_raw", msg.Image, callback=detector.rgb_cb)
+    rospy.Subscriber("/zed/depth/image_raw", msg.Image, callback=detector.depth_cb)
 
     while True:
         if detector.new_img_arrived:

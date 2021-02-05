@@ -86,10 +86,10 @@ class SegwayTeleop:
                 sys.exit(0)
                 return
         else:
-            self.vel_limit_mps = rospy.get_param('~sim_teleop_vel_limit_mps',0.5)
-            self.yaw_rate_limit_rps = rospy.get_param('~sim_teleop_yaw_rate_limit_rps',0.5)
-            self.accel_lim = rospy.get_param('~sim_teleop_accel_lim',0.5)
-            self.yaw_accel_lim = rospy.get_param('~sim_teleop_yaw_accel_lim',1.0)           
+            self.vel_limit_mps = rospy.get_param('~sim_teleop_vel_limit_mps', 50)
+            self.yaw_rate_limit_rps = rospy.get_param('~sim_teleop_yaw_rate_limit_rps',50)
+            self.accel_lim = rospy.get_param('~sim_teleop_accel_lim',50)
+            self.yaw_accel_lim = rospy.get_param('~sim_teleop_yaw_accel_lim',100)           
         
         default_ctrl_map = dict({'momentary':[[{'is_button':True,'index':4,'set_val':1}],
                                               [{'is_button':True,'index':8,'set_val':1}],

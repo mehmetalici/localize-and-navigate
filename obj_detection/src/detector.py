@@ -23,21 +23,25 @@ for gpu in gpus:
     tf.config.experimental.set_memory_growth(gpu, True)
 
 
-PATH_TO_MODEL_DIR = '/home/malici/.keras/datasets/centernet_resnet50_v1_fpn_512x512_coco17_tpu-8'
+# PATH_TO_MODEL_DIR = '/home/malici/.keras/datasets/centernet_resnet50_v1_fpn_512x512_coco17_tpu-8'
+PATH_TO_MODEL_DIR = '/home/malici/.keras/datasets/ssd_mobilenet_v2_320x320_coco17_tpu-8'
 PATH_TO_LABELS = '/home/malici/.keras/datasets/mscoco_label_map.pbtxt'
 PATH_TO_SAVED_MODEL = PATH_TO_MODEL_DIR + "/saved_model"
 TRACKER_TYPES = ['BOOSTING', 'MIL','KCF', 'TLD', 'MEDIANFLOW', 'GOTURN', 'MOSSE', 'CSRT']
 
 
 class Detector:
-    def __init__(self, obj_to_detect, tracker_name="MIL", certainty_threshold=0.7):
+    def __init__(self, obj_to_detect, tracker_name="MIL", certainty_threshold=0.4):
         self.category_index = get_label_map_data()
         self.obj = self.get_obj_as_dict(obj_to_detect)
         self.detect_fn = load_model()
         self.img_pub = rospy.Publisher("/rgb_with_dets", msg.Image, queue_size=50)
+        self.img_depth_pub = rospy.Publisher("/depth_with_dets", msg.Image, queue_size=50)
+        self.target_depth_pub = rospy.Publisher("/targetD", Float64, queue_size=1)
         self.box_pubs = [rospy.Publisher(name, Float64, queue_size=1) for name in ["targetX", "targetY"]]
         self.new_img_arrived = False
         self.image = None
+        self.depth = None
         self.bridge = CvBridge()
         self.mode = "IDLE"
         self.certainty_threshold = certainty_threshold
@@ -49,12 +53,28 @@ class Detector:
         self.last_target_loc = None
         self.pred_interval = 10
         self.pred_cnt = 0
+        
+
+    def depth_cb(self, data):
+        cv_image = self.bridge.imgmsg_to_cv2(data, desired_encoding=data.encoding)
+        self.depth = cv_image
+
 
     def get_obj_as_dict(self, obj_to_detect):
         for k, v in self.category_index.items():
             if obj_to_detect == v["name"]:
                 return {"id": v["id"], "name": v["name"], "box": np.array([]), "score": np.NaN}
         raise Exception(f"Object {obj_to_detect} not in category index defined in {PATH_TO_LABELS}")
+
+    def publish_target_depth(self):
+        [x, y, w, h] = list(map(int, self.convert_rel_to_norm_xywh(self.obj["box"])))
+        mask = np.zeros(self.depth.shape, np.uint8)
+        mask[y: y+h, x: x+w] = 255
+        hist = cv2.calcHist([self.depth], channels=[0], mask=mask, histSize=[256], ranges=[0, 256])
+        target_depth = np.argmax(hist.flatten())
+        print(f"Target distance is {target_depth} m.")
+        self.target_depth_pub.publish(target_depth)
+
 
     def get_detections(self):
         input_tensor = tf.convert_to_tensor(self.image)
@@ -88,22 +108,39 @@ class Detector:
         return np.array([y1/self.height, x1/self.width, y2/self.height, x2/self.width])
 
 
-    def draw_obj_to_img(self, obj, show_score=True):
+    def draw_obj_to_img(self, obj, img=None, show_score=True, draw_depth=False):
         score = None
         if show_score:
             score = np.array([obj["score"]])
-        image_copy = self.image.copy()
-        viz_utils.visualize_boxes_and_labels_on_image_array(
-            image_copy,
-            np.expand_dims(obj["box"], axis=0),
-            np.array([obj["id"]]),
-            score,
-            self.category_index,
-            use_normalized_coordinates=True,
-            max_boxes_to_draw=200,
-            min_score_thresh=.30,
-            agnostic_mode=False)
-        return image_copy
+        
+        if img is None:
+            image_copy = self.image.copy()
+        else:
+            image_copy = img.copy()
+
+        images = [image_copy]
+        if draw_depth:
+            rows_d, cols_d = self.depth.shape
+            depth_as_rgb_copy = np.array([[[self.depth[i, j]] * 3 for j in range(cols_d)] for i in range(rows_d)])
+            images.append(depth_as_rgb_copy)
+
+        for img_elt in images:
+            viz_utils.visualize_boxes_and_labels_on_image_array(
+                img_elt,
+                np.expand_dims(obj["box"], axis=0),
+                np.array([obj["id"]]),
+                score,
+                self.category_index,
+                use_normalized_coordinates=True,
+                max_boxes_to_draw=200,
+                min_score_thresh=.30,
+                agnostic_mode=False)
+        
+        if len(images) == 1:
+            return images[0]
+
+        return images
+
 
     def rgb_cb(self, data):
         cv_image = self.bridge.imgmsg_to_cv2(data, desired_encoding=data.encoding)
@@ -137,37 +174,41 @@ class Detector:
         if self.mode == "SEARCH":   
             detections = self.get_detections()
             if self.got_object(detections):
-                print("Found object with box {}".format(self.obj["box"]))
+                print("Found a person at {} {}".format(self.obj["name"], self.obj["box"]))
                 self.calibration_cnt += 1
                 #print("Waiting {}%".format(int(self.calibration_cnt/self.calibration_max*100)))
                 if self.calibration_cnt == self.calibration_max:
                     self.calibration_cnt = 0
                     image_w_box = self.draw_obj_to_img(self.obj)
                     self.publish_img(image_w_box)
+                    self.publish_target_depth()
                     self.tracker.init(self.image, self.convert_rel_to_norm_xywh(self.obj["box"])) 
                     self.mode = "TRACK"
             else:
                 print("Could not find the object. Searching...")
                 self.calibration_cnt = 0
         if self.mode == "TRACK":
-            ok = self.track()
+            ok, current_img = self.track()
             if ok:
-                image_with_box = self.draw_obj_to_img(self.obj, show_score=False)
+                image_with_box = self.draw_obj_to_img(self.obj, img=current_img, show_score=False)
                 self.publish_img(image_with_box)
                 self.publish_box_center(self.convert_rel_to_norm_xywh(self.obj["box"]))
+                self.publish_target_depth()
                 self.pred_cnt += 1
                 if self.pred_cnt == self.pred_interval:
                     self.pred_cnt = 0
                     self.mode = "SEARCH"
             else:
                 print("Tracking failure.")
-            #opencv api
-            #derinlik
-            print("Tracking the object {} at {}".format(self.obj["name"], self.obj["box"]))
+            print("Tracking the {} at {}".format(self.obj["name"], self.convert_rel_to_norm_xywh(self.obj["box"])))
     
-    def publish_img(self, image):
+    def publish_img(self, image, depth=None):
         output_img_msg = self.bridge.cv2_to_imgmsg(image)
         self.img_pub.publish(output_img_msg)
+        if depth is not None:
+            depth = np.array(depth, dtype=np.uint8)
+            output_depth_msg = self.bridge.cv2_to_imgmsg(depth)
+            self.img_depth_pub.publish(output_depth_msg)
 
     def publish_box_center(self, box):
         center_x = box[0] + box[2] / 2
@@ -177,14 +218,15 @@ class Detector:
             p.publish(c)
             pass
             
-        print(f"center X: {center_x}\n centerY: {center_y}")
+        #print(f"center X: {center_x}\n centerY: {center_y}")
 
     def track(self):
         timer = cv2.getTickCount()
-        ok, bbox = self.tracker.update(self.image)
+        current_img = self.image.copy()
+        ok, bbox = self.tracker.update(current_img)
         self.obj["box"] = self.convert_norm_xywh_to_rel(bbox)
         # fps = cv2.getTickFrequency() / (cv2.getTickCount() - timer)
-        return ok
+        return ok, current_img
         
 
 def load_model():
