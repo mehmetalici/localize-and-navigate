@@ -372,9 +372,9 @@ class APFRL():
         
         dgammax = 2*dgx
         dgammay = 2*dgy
-        # k = (action[2]+1.5)*2
+        k = (action[2]+1.5)*2
         B = np.prod(Bs)
-        # k = round(ln B/ ln gamma)
+        #k = round(np.log(B) / np.log(gamma))
         Fth = np.arctan2(-(k*dgammay*B - gamma*B*denomy),-(k*dgammax*B - gamma*B*denomx))
         th = Fth - self.yaw - np.pi
         v = max((action[0]+1)*np.cos(th)*self.vMax/2,np.cos(th)*self.vMax/2)
