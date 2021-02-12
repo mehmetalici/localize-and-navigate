@@ -13,15 +13,20 @@ An object detection and relative navigation scheme for our custom robot on Gazeb
     sudo apt-get install ros-melodic-costmap-2d ros-melodic-robot-localization ros-melodic-yocs-cmd-vel-mux ros-melodic-effort-controllers ros-melodic-navigation ros-melodic-geometry2 ros-melodic-nmea-msgs ros-melodic-bfl ros-melodic-arbotix-python
     ```
 
-3. SDL Library Dependencies
+3. Tensorflow Object Detection API
 
-    Run,
-    ``` 
-    sudo apt-get install libsdl-image1.2-dev libsdl-dev
+    Install following the tutorial under the link,
+    
+     https://tensorflow-object-detection-api-tutorial.readthedocs.io/en/latest/install
+
+4. Python Dependencies
+
+    Activate the Conda environment created in Step 3 and run,
     ```
-
-
+    conda install opencv-python
+    ```
 ### Installing
+#### Robot and Environment
 1. Create a new Catkin workspace,
     ``` 
     mkdir -p ~/navi_ws/src
@@ -32,7 +37,6 @@ An object detection and relative navigation scheme for our custom robot on Gazeb
     git clone https://github.com/mehmetalici/localize-and-navigate.git
     ```
 
-3. Convert `PLUGINLIB_DECLARE_CLASS` to `PLUGINLIB_DECLARE_CLASS` following [this link](http://docs.ros.org/en/jade/api/pluginlib/html/class__list__macros_8h.html).
 
 4. Build the packages in the workspace,
     ``` 
@@ -45,14 +49,38 @@ An object detection and relative navigation scheme for our custom robot on Gazeb
     source devel/setup.bash
     source src/localize-and-navigate/segway_v3/segway_v3_config/std_configs/segway_config_RMP_220.bash
     ``` 
-6. Test the installation running,
+6. Test the robot and environment running,
     ``` 
     roslaunch segway_gazebo segway_empty_world.launch
     ``` 
     You should see our robot and world in the Gazebo simulation software.
 
+#### Detection
+1. Download a model
+    
+    Activate your environment, and run,
+    ``` 
+    cd ~/navi_ws/src/localize-and-navigate/obj_detection/src
+    python download_model.py 20200711 ssd_mobilenet_v2_320x320_coco17_tpu-8
+    ``` 
+    to download the model with name and date `ssd_mobilenet_v2_320x320_coco17_tpu-8` and `20200711`, respectively. 
 
-## Usage
+    You can change the model name and date according to the models in the following list, which involves all pre-trained models,
+    https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/tf2_detection_zoo.md
+
+#### Tracking
+1. Download a specific version of OpenCV Bridge.
+
+    Apply,
+    ``` 
+    cd ~
+    git clone https://github.com/mehmetalici/opencv-bridge-err-resolver.git
+    cd opencv-bridge-err-resolver
+    catkin clean -b
+    catkin build
+    ``` 
+
+## Robot Control
 
 ### Control of Head
 A pan-tilt device rotates the head of the robot. The joints of Pan-Tilt are controlled by their PID controllers. 
@@ -93,5 +121,35 @@ Sensor information can be visualized using `RViz`. To do this, follow the instru
 ). 
 
 
-## Acknowledgements
-The repository is under active development. Our future plans involve object detection and navigation.
+## Detection and Tracking
+1. Activate your environment and source your workspace. 
+2. Run,
+    ```
+    roscd obj_detection/src
+    source ~/opencv-bridge-err-resolver/install/setup.bash
+    ```
+3. To detect a `person`, run,
+    ```
+    python detect_track.py person
+    ```
+    To see a complete list of avaliable objects you can pass to the script, go to the directory in which you downloaded the model and open `mscoco_label_map.pbtxt`.
+
+4. To visualize detection, run,
+    ```
+    rosrun rviz rviz
+    ```
+    Then select the topics `/rgb_with_det` or `/rgb_with_det`, which produces images with boxes of target object, on RViz GUI.
+
+## Navigation
+1. Source the workspace and run,
+
+    ```
+    roscd obj_detection/src
+    python navigate_goal.py 
+    ```
+2. Run the APF algorithm,
+    ```
+    roscd apfrl/src
+    python apf_rl_0707.py
+    ```
+

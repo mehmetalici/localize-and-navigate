@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from std_msgs.msg import Float64
 import numpy as np
 from control_msgs.msg import JointControllerState  
-
+import math
 
 class Navigator():
     def __init__(self, pub):

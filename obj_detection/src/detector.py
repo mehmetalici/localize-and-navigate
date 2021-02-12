@@ -66,7 +66,7 @@ class Detector:
                 return {"id": v["id"], "name": v["name"], "box": np.array([]), "score": np.NaN}
         raise Exception(f"Object {obj_to_detect} not in category index defined in {PATH_TO_LABELS}")
 
-    def publish_target_depth(self):
+    def publish_target_distance(self):
         [x, y, w, h] = list(map(int, self.convert_rel_to_norm_xywh(self.obj["box"])))
         mask = np.zeros(self.depth.shape, np.uint8)
         mask[y: y+h, x: x+w] = 255
@@ -169,35 +169,36 @@ class Detector:
 
     def spinOnce(self):
         if self.mode == "IDLE":
-            self.mode = "SEARCH"
+            self.mode = "DETECT"
             print("Searching the {}".format(self.obj["name"]))
-        if self.mode == "SEARCH":   
+
+        if self.mode == "DETECT":   
             detections = self.get_detections()
             if self.got_object(detections):
                 print("Found a person at {} {}".format(self.obj["name"], self.obj["box"]))
-                self.calibration_cnt += 1
-                #print("Waiting {}%".format(int(self.calibration_cnt/self.calibration_max*100)))
-                if self.calibration_cnt == self.calibration_max:
-                    self.calibration_cnt = 0
-                    image_w_box = self.draw_obj_to_img(self.obj)
-                    self.publish_img(image_w_box)
-                    self.publish_target_depth()
-                    self.tracker.init(self.image, self.convert_rel_to_norm_xywh(self.obj["box"])) 
-                    self.mode = "TRACK"
+                self.calibration_cnt = 0
+                image_w_box = self.draw_obj_to_img(self.obj)
+                self.publish_img(image_w_box)
+                self.publish_target_distance()
+                self.tracker.init(self.image, self.convert_rel_to_norm_xywh(self.obj["box"])) 
+                self.mode = "TRACK"
             else:
                 print("Could not find the object. Searching...")
-                self.calibration_cnt = 0
+
         if self.mode == "TRACK":
+            start = time.time()
             ok, current_img = self.track()
+            end = time.time()
+            print(f"Tracking time: {end-start}")
             if ok:
                 image_with_box = self.draw_obj_to_img(self.obj, img=current_img, show_score=False)
                 self.publish_img(image_with_box)
                 self.publish_box_center(self.convert_rel_to_norm_xywh(self.obj["box"]))
-                self.publish_target_depth()
+                self.publish_target_distance()
                 self.pred_cnt += 1
                 if self.pred_cnt == self.pred_interval:
                     self.pred_cnt = 0
-                    self.mode = "SEARCH"
+                    self.mode = "DETECT"
             else:
                 print("Tracking failure.")
             print("Tracking the {} at {}".format(self.obj["name"], self.convert_rel_to_norm_xywh(self.obj["box"])))
