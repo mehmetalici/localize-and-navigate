@@ -9,7 +9,7 @@ import warnings
 from cv_bridge import CvBridge, CvBridgeError
 from object_detection.utils import visualization_utils as viz_utils
 import argparse
-from detector import Detector
+from detect_tracker import Detector
 import threading
 warnings.filterwarnings('ignore')   # Suppress Matplotlib warnings
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'    # Suppress TensorFlow logging (1)

@@ -8,7 +8,7 @@ import time
 import numpy as np
 from PIL import Image
 import warnings
-from cv_bridge import CvBridge, CvBridgeError
+from cv_bridge import CvBridge
 from object_detection.utils import visualization_utils as viz_utils
 from cv2 import cv2
 
@@ -25,10 +25,11 @@ for gpu in gpus:
 
 # PATH_TO_MODEL_DIR = '/home/malici/.keras/datasets/centernet_resnet50_v1_fpn_512x512_coco17_tpu-8'
 PATH_TO_MODEL_DIR = '/home/malici/.keras/datasets/ssd_mobilenet_v2_320x320_coco17_tpu-8'
+#PATH_TO_MODEL_DIR = '/home/malici/.keras/datasets/ssd_mobilenet_v2_fpnlite_320x320_coco17_tpu-8'
 PATH_TO_LABELS = '/home/malici/.keras/datasets/mscoco_label_map.pbtxt'
 PATH_TO_SAVED_MODEL = PATH_TO_MODEL_DIR + "/saved_model"
 TRACKER_TYPES = ['BOOSTING', 'MIL','KCF', 'TLD', 'MEDIANFLOW', 'GOTURN', 'MOSSE', 'CSRT']
-
+NO_BOX = [0, 0, 0, 0]
 
 class Detector:
     def __init__(self, obj_to_detect, tracker_name="MIL", certainty_threshold=0.4):
@@ -175,7 +176,7 @@ class Detector:
         if self.mode == "DETECT":   
             detections = self.get_detections()
             if self.got_object(detections):
-                print("Found a person at {} {}".format(self.obj["name"], self.obj["box"]))
+                print("Found a {} at {}".format(self.obj["name"], self.obj["box"]))
                 self.calibration_cnt = 0
                 image_w_box = self.draw_obj_to_img(self.obj)
                 self.publish_img(image_w_box)
@@ -184,12 +185,15 @@ class Detector:
                 self.mode = "TRACK"
             else:
                 print("Could not find the object. Searching...")
+                self.publish_box_center(NO_BOX)
+                self.publish_img(self.image)
 
         if self.mode == "TRACK":
             start = time.time()
             ok, current_img = self.track()
             end = time.time()
-            print(f"Tracking time: {end-start}")
+            
+            print(f"Tracking took {round(end-start, 2)} s")
             if ok:
                 image_with_box = self.draw_obj_to_img(self.obj, img=current_img, show_score=False)
                 self.publish_img(image_with_box)

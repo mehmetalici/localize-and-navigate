@@ -46,7 +46,12 @@ def target_x_cb(cmd):
         print("Pan is busy")
         return
     global current_rx
-    current_rx = calc_ref(cmd.data, current_rx, CAM_WIDTH, RX_LIM, REFLECT_AXIS_X)
+    
+    if cmd.data == 0:
+        current_rx = 0
+    else:
+        current_rx = calc_ref(cmd.data, current_rx, CAM_WIDTH, RX_LIM, REFLECT_AXIS_X)
+    
     pan_ref_pub.publish(current_rx)
 
 def target_y_cb(cmd):
@@ -54,7 +59,11 @@ def target_y_cb(cmd):
         print("Tilt is busy")
         return
     global current_ry
-    current_ry = calc_ref(cmd.data, current_ry, CAM_HEIGHT, RY_LIM, REFLECT_AXIS_Y)
+
+    if cmd.data == 0:
+        current_ry = 0
+    else:
+        current_ry = calc_ref(cmd.data, current_ry, CAM_HEIGHT, RY_LIM, REFLECT_AXIS_Y)
     tilt_ref_pub.publish(current_ry)
 
 def pan_state_cb(data):

@@ -828,58 +828,58 @@
       <pose frame=''>20.4398 34.1182 0 0 -0 0</pose>
     </model>
     <state world_name='default'>
-      <sim_time>883 908000000</sim_time>
-      <real_time>313 104686922</real_time>
-      <wall_time>1612640037 239439591</wall_time>
-      <iterations>63510</iterations>
+      <sim_time>1130 917000000</sim_time>
+      <real_time>675 118266564</real_time>
+      <wall_time>1613238524 694675866</wall_time>
+      <iterations>70191</iterations>
       <model name='Construction Barrel'>
-        <pose frame=''>3.73038 -4.66418 0.049999 3e-06 0 6.6e-05</pose>
+        <pose frame=''>3.73041 -4.66416 0.049999 4e-06 -0 0.000102</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose frame=''>3.73038 -4.66418 0.049999 3e-06 0 6.6e-05</pose>
+          <pose frame=''>3.73041 -4.66416 0.049999 4e-06 -0 0.000102</pose>
           <velocity>0 0 0 0 -0 0</velocity>
-          <acceleration>1.80687 -3.53225 -0.711645 -0.593723 -1.36915 -3.13318</acceleration>
-          <wrench>903.437 -1766.13 -355.823 0 -0 0</wrench>
+          <acceleration>2.06229 -3.61508 -0.633894 2.75463 -1.13189 0.006183</acceleration>
+          <wrench>1031.14 -1807.54 -316.947 0 -0 0</wrench>
         </link>
       </model>
       <model name='Construction Barrel_0'>
-        <pose frame=''>18.6253 -18.0319 0.049999 -1e-06 -3e-06 6.9e-05</pose>
+        <pose frame=''>18.6253 -18.0319 0.05 -0 -1e-06 0.000104</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose frame=''>18.6253 -18.0319 0.049999 -1e-06 -3e-06 6.9e-05</pose>
+          <pose frame=''>18.6253 -18.0319 0.05 -0 -1e-06 0.000104</pose>
           <velocity>0 0 0 0 -0 0</velocity>
-          <acceleration>-2.03481 3.61307 0.575021 -2.75073 1.20531 -0.009252</acceleration>
-          <wrench>-1017.41 1806.53 287.511 0 -0 0</wrench>
+          <acceleration>-2.07771 4.04127 0.793081 2.46357 1.08656 0.001993</acceleration>
+          <wrench>-1038.86 2020.64 396.541 0 -0 0</wrench>
         </link>
       </model>
       <model name='Construction Barrel_1'>
-        <pose frame=''>18.4471 -15.4451 0.049999 -1e-06 -2e-06 7.2e-05</pose>
+        <pose frame=''>18.4471 -15.4451 0.049999 3e-06 -0 0.000109</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose frame=''>18.4471 -15.4451 0.049999 -1e-06 -2e-06 7.2e-05</pose>
+          <pose frame=''>18.4471 -15.4451 0.049999 3e-06 -0 0.000109</pose>
           <velocity>0 0 0 0 -0 0</velocity>
-          <acceleration>-2.01335 3.63137 0.683304 -2.79577 1.25412 -0.006266</acceleration>
-          <wrench>-1006.68 1815.69 341.652 0 -0 0</wrench>
+          <acceleration>2.16554 -3.64784 -0.584443 2.83705 -0.874749 0.006249</acceleration>
+          <wrench>1082.77 -1823.92 -292.222 0 -0 0</wrench>
         </link>
       </model>
       <model name='Construction Barrel_2'>
-        <pose frame=''>18.527 -14.2409 0.049999 -1e-06 -3e-06 6.9e-05</pose>
+        <pose frame=''>18.527 -14.2409 0.049999 -1e-06 -4e-06 0.000105</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose frame=''>18.527 -14.2409 0.049999 -1e-06 -3e-06 6.9e-05</pose>
+          <pose frame=''>18.527 -14.2409 0.049999 -1e-06 -4e-06 0.000105</pose>
           <velocity>0 0 0 0 -0 0</velocity>
-          <acceleration>-2.97078 2.97051 -0.222057 -1.17281 -1.11997 -0.030777</acceleration>
-          <wrench>-1485.39 1485.26 -111.029 0 -0 0</wrench>
+          <acceleration>-2.98665 2.77247 -0.646702 -0.643972 -1.18178 -0.003958</acceleration>
+          <wrench>-1493.32 1386.23 -323.351 0 -0 0</wrench>
         </link>
       </model>
       <model name='Construction Barrel_3'>
-        <pose frame=''>18.579 -16.9136 0.049999 4e-06 -0 6.9e-05</pose>
+        <pose frame=''>18.579 -16.9136 0.05 -1e-06 -2e-06 0.000102</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose frame=''>18.579 -16.9136 0.049999 4e-06 -0 6.9e-05</pose>
+          <pose frame=''>18.579 -16.9136 0.05 -1e-06 -2e-06 0.000102</pose>
           <velocity>0 0 0 0 -0 0</velocity>
-          <acceleration>1.77933 -3.52248 -0.698702 -0.618567 -1.30125 -3.13378</acceleration>
-          <wrench>889.666 -1761.24 -349.351 0 -0 0</wrench>
+          <acceleration>-2.2908 2.62144 -0.132345 -0.288489 0.573435 -0.019268</acceleration>
+          <wrench>-1145.4 1310.72 -66.1723 0 -0 0</wrench>
         </link>
       </model>
       <model name='House 1'>
@@ -1242,16 +1242,6 @@
           <wrench>0 0 0 0 -0 0</wrench>
         </link>
       </model>
-      <model name='number2'>
-        <pose frame=''>4.51789 1.09262 0.4 0 -0 0</pose>
-        <scale>1 1 1</scale>
-        <link name='link'>
-          <pose frame=''>4.51789 1.09262 0.4 0 -0 0</pose>
-          <velocity>0 0 0 0 -0 0</velocity>
-          <acceleration>0 0 0 0 -0 0</acceleration>
-          <wrench>0 0 0 0 -0 0</wrench>
-        </link>
-      </model>
       <model name='number7'>
         <pose frame=''>-10.2093 6.94402 0.4 0 -0 0</pose>
         <scale>1 1 1</scale>
@@ -1282,14 +1272,24 @@
           <wrench>0 0 0 0 -0 0</wrench>
         </link>
       </model>
-      <model name='person_standing_0'>
-        <pose frame=''>8.42283 -2.03426 0.05 -2e-06 -1e-06 -1.64268</pose>
+      <model name='oak_tree_1'>
+        <pose frame=''>14.6698 -1.59624 0 0 -0 0</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose frame=''>8.42283 -2.03426 0.05 -2e-06 -1e-06 -1.64268</pose>
+          <pose frame=''>14.6698 -1.59624 0 0 -0 0</pose>
           <velocity>0 0 0 0 -0 0</velocity>
-          <acceleration>-1.72749 -2.15522 1.82786 -1.0278 -1.16697 2.95334</acceleration>
-          <wrench>-138.199 -172.418 146.229 0 -0 0</wrench>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='person_standing_0'>
+        <pose frame=''>11.2964 -4.85087 0.049999 -1e-06 1e-06 -1.64118</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose frame=''>11.2964 -4.85087 0.049999 -1e-06 1e-06 -1.64118</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>1.05302 -1.74454 -1.28397 1.72299 1.12719 -0.054663</acceleration>
+          <wrench>84.2414 -139.563 -102.718 0 -0 0</wrench>
         </link>
       </model>
       <model name='pine_tree'>
@@ -1373,13 +1373,13 @@
         </link>
       </model>
       <model name='quadrotor'>
-        <pose frame=''>10.8238 -12.7376 0.049992 1e-06 -0 0.001083</pose>
+        <pose frame=''>10.8238 -12.7376 0.050001 -1.3e-05 0 0.00139</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose frame=''>10.8238 -12.7376 0.232458 1e-06 -0 0.001083</pose>
+          <pose frame=''>10.8238 -12.7376 0.232467 -1.3e-05 0 0.00139</pose>
           <velocity>0 0 0 0 -0 0</velocity>
-          <acceleration>0 0 -9.8 0 -0 0</acceleration>
-          <wrench>0 0 -12.8968 0 -0 0</wrench>
+          <acceleration>-0.047489 -5.63459 4.95936 -0.55458 -0.272824 0.0805</acceleration>
+          <wrench>-0.062496 -7.41512 6.52651 0 -0 0</wrench>
         </link>
       </model>
       <model name='school'>
@@ -1387,6 +1387,16 @@
         <scale>1 1 1</scale>
         <link name='link'>
           <pose frame=''>-40.1951 2.81658 0 0 -0 1.5708</pose>
+          <velocity>0 0 0 0 -0 0</velocity>
+          <acceleration>0 0 0 0 -0 0</acceleration>
+          <wrench>0 0 0 0 -0 0</wrench>
+        </link>
+      </model>
+      <model name='suv'>
+        <pose frame=''>14.8325 1.90828 0 0 -0 0</pose>
+        <scale>1 1 1</scale>
+        <link name='link'>
+          <pose frame=''>14.8325 1.90828 0 0 -0 0</pose>
           <velocity>0 0 0 0 -0 0</velocity>
           <acceleration>0 0 0 0 -0 0</acceleration>
           <wrench>0 0 0 0 -0 0</wrench>
@@ -3584,29 +3594,6 @@
       </link>
       <pose frame=''>7.17884 -6.63175 0 0 -0 0</pose>
     </model>
-    <model name='number2'>
-      <pose frame=''>-1.86651 -6.79374 0.4 0 -0 0</pose>
-      <static>1</static>
-      <link name='link'>
-        <visual name='visual'>
-          <geometry>
-            <mesh>
-              <uri>model://number1/meshes/number.dae</uri>
-            </mesh>
-          </geometry>
-          <material>
-            <script>
-              <uri>model://number2/materials/scripts</uri>
-              <uri>model://number2/materials/textures</uri>
-              <name>Number/Two</name>
-            </script>
-          </material>
-        </visual>
-        <self_collide>0</self_collide>
-        <enable_wind>0</enable_wind>
-        <kinematic>0</kinematic>
-      </link>
-    </model>
     <model name='number7'>
       <pose frame=''>-10.2093 6.94402 0.4 0 -0 0</pose>
       <static>1</static>
@@ -3787,10 +3774,113 @@
     </model>
     <gui fullscreen='0'>
       <camera name='user_camera'>
-        <pose frame=''>-10.3819 -18.5932 10.9765 0 0.499911 0.725881</pose>
+        <pose frame=''>-16.0625 0.19522 13.1147 0 0.435911 -0.01012</pose>
         <view_controller>orbit</view_controller>
         <projection_type>perspective</projection_type>
       </camera>
     </gui>
+    <model name='oak_tree_1'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <geometry>
+            <mesh>
+              <uri>model://oak_tree/meshes/oak_tree.dae</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='branch'>
+          <geometry>
+            <mesh>
+              <uri>model://oak_tree/meshes/oak_tree.dae</uri>
+              <submesh>
+                <name>Branch</name>
+              </submesh>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <uri>model://oak_tree/materials/scripts/</uri>
+              <uri>model://oak_tree/materials/textures/</uri>
+              <name>OakTree/Branch</name>
+            </script>
+          </material>
+        </visual>
+        <visual name='bark'>
+          <geometry>
+            <mesh>
+              <uri>model://oak_tree/meshes/oak_tree.dae</uri>
+              <submesh>
+                <name>Bark</name>
+              </submesh>
+            </mesh>
+          </geometry>
+          <material>
+            <script>
+              <uri>model://oak_tree/materials/scripts/</uri>
+              <uri>model://oak_tree/materials/textures/</uri>
+              <name>OakTree/Bark</name>
+            </script>
+          </material>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose frame=''>11.761 -0.945528 0 0 -0 0</pose>
+    </model>
+    <model name='suv'>
+      <static>1</static>
+      <link name='link'>
+        <collision name='collision'>
+          <pose frame=''>0 0 0 0 0 -1.5708</pose>
+          <geometry>
+            <mesh>
+              <scale>0.06 0.06 0.06</scale>
+              <uri>model://suv/meshes/suv.obj</uri>
+            </mesh>
+          </geometry>
+          <max_contacts>10</max_contacts>
+          <surface>
+            <contact>
+              <ode/>
+            </contact>
+            <bounce/>
+            <friction>
+              <torsional>
+                <ode/>
+              </torsional>
+              <ode/>
+            </friction>
+          </surface>
+        </collision>
+        <visual name='visual'>
+          <pose frame=''>0 0 0 0 0 -1.5708</pose>
+          <geometry>
+            <mesh>
+              <scale>0.06 0.06 0.06</scale>
+              <uri>model://suv/meshes/suv.obj</uri>
+            </mesh>
+          </geometry>
+        </visual>
+        <self_collide>0</self_collide>
+        <enable_wind>0</enable_wind>
+        <kinematic>0</kinematic>
+      </link>
+      <pose frame=''>5.50487 2.08931 0 0 -0 0</pose>
+    </model>
   </world>
 </sdf>

@@ -38,7 +38,7 @@ class Navigator():
     def navigate_goal(self):
         command = msg.PoseStamped()
         command.pose.position.x = self.distance
-        command.pose.orientation.z = self.pan_angle
+        command.pose.orientation.z = -self.pan_angle
         self.pub.publish(command)
 
     def pan_cb(self, data):

@@ -329,7 +329,7 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
     <gazebo reference="velodyne">
     <material>Gazebo/FlatBlack</material>
     <sensor type="ray" name="lds_lfcd_sensor">
-      <pose>0 0 0 0 0 0</pose>
+      <pose>0 0 0 0 0 0 0</pose>
       <visualize>False</visualize>
       <update_rate>10</update_rate>
       <ray>
