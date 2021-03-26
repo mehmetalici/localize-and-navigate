@@ -87,7 +87,7 @@ target_x_sub = rospy.Subscriber("targetX", Float64, target_x_cb)
 target_y_sub = rospy.Subscriber("targetY", Float64, target_y_cb)
 
 pan_state_sub = rospy.Subscriber("/pan_controller/state", JointControllerState, pan_state_cb) 
-tilt_state_sub = rospy.Subscriber("/tilt_controller/state", JointControllerState, tilt_state_cb) 
+tilt_state_sub = rospy.Subscriber("/pan_controller/state", JointControllerState, tilt_state_cb) 
 
 rospy.spin()
     

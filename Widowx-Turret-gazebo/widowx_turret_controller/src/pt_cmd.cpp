@@ -2,6 +2,8 @@
 #include "std_msgs/Float64.h"
 #include <iostream>
 #include <sstream>
+#include "control_msgs/JointControllerState.h"
+#include <cmath>
 
 #define CAM_WIDTH 640
 #define CAM_HEIGHT 480
@@ -10,10 +12,12 @@
 #define RY_LIM PI / 3.6
 #define REFLECT_AXIS_X 1
 #define REFLECT_AXIS_Y 1
+#define E_SS_LIM 0.01
 
 ros::Publisher panRefPub;
 ros::Publisher tiltRefPub;
 float current_rx = 0, current_ry = 0;
+bool is_pan_moving = false, is_tilt_moving = false;
 
 float calcRef(float target, float *current_r, int maxRes, float r_lim, bool is_reflected){
     float center = maxRes / 2;
@@ -24,20 +28,57 @@ float calcRef(float target, float *current_r, int maxRes, float r_lim, bool is_r
     }
     new_r += *current_r;
     *current_r = new_r;
-    std::cout << *current_r;
     return new_r;
 }
 
 void targetXCb(const std_msgs::Float64::ConstPtr& targetX){
+    if (is_pan_moving){
+        ROS_INFO("Pan is busy");
+        return;
+    }
+    if (targetX->data == 0){
+        current_rx = 0;
+    }
+    else {
+        current_rx = calcRef(targetX->data, &current_rx, CAM_WIDTH, RX_LIM, REFLECT_AXIS_X);
+    }
+
     std_msgs::Float64 panRef;
-    panRef.data = calcRef(targetX->data, &current_rx, CAM_WIDTH, RX_LIM, REFLECT_AXIS_X);
+    panRef.data = current_rx;
     panRefPub.publish(panRef);
 }
 
 void targetYCb(const std_msgs::Float64::ConstPtr& targetY){
+    if (is_tilt_moving){
+        ROS_INFO("Tilt is busy");
+        return;
+    }
+    if (targetY->data == 0){
+        current_ry = 0;
+    }
+    else {
+        current_ry = calcRef(targetY->data, &current_ry, CAM_HEIGHT, RY_LIM, REFLECT_AXIS_Y);
+    }
     std_msgs::Float64 tiltRef;
-    tiltRef.data = calcRef(targetY->data, &current_ry, CAM_HEIGHT, RY_LIM, REFLECT_AXIS_Y);
+    tiltRef.data = current_ry;
     tiltRefPub.publish(tiltRef);
+}
+
+bool detect_movement(float r, float y, const std::string& name){
+    float err = r - y; 
+    if (std::abs(err) > E_SS_LIM){
+        ROS_INFO("%s is moving. Err: %f", name.c_str(), err);
+        return true;
+    }
+    return false;
+}
+
+void pan_state_cb(const control_msgs::JointControllerState::ConstPtr& panState){
+    is_pan_moving = detect_movement(current_rx, panState->process_value, "pan");
+}
+
+void tilt_state_cb(const control_msgs::JointControllerState::ConstPtr& tiltState){
+    is_tilt_moving = detect_movement(current_ry, tiltState->process_value, "tilt");
 }
 
 
@@ -52,6 +93,9 @@ int main(int argc, char **argv){
 
     ros::Subscriber targetXSub = nh.subscribe("targetX", 1, targetXCb);
     ros::Subscriber targetYSub = nh.subscribe("targetY", 1, targetYCb);
+
+    ros::Subscriber panStateSub = nh.subscribe("/pan_controller/state", 1, pan_state_cb);
+    ros::Subscriber tiltStateSub = nh.subscribe("/pan_controller/state", 1, tilt_state_cb);
 
     while (true){
         ros::spinOnce();

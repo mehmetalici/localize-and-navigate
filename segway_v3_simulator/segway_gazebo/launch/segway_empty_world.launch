@@ -18,7 +18,7 @@
   <include file="$(find widowx_turret_controller)/launch/widowx_turret_gazebo_controller.launch"/> 
 
   <node if="$(arg rviz)" pkg="rviz" type="rviz" name="$(anon rviz)" respawn="false" output="screen" args="-d $(find segway_gazebo)/rviz/example.rviz" />
-  <node pkg="widowx_turret_controller" name="pt_cmd_py" type="pt_cmd_py.py"/>
+  <node pkg="widowx_turret_controller" name="pt_cmd" type="pt_cmd"/>
   <!-- <node pkg="apfrl" name="apf_rl_0707" type="apf_rl_0707.py"/> -->
   <node pkg="obj_detection" name="navigate_goal" type="navigate_goal.py"/>
 </launch>
