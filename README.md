@@ -1,6 +1,6 @@
 # Object Localization and Relative Navigation on Gazebo
 An object detection and relative navigation scheme for our custom robot on Gazebo.
-
+![](demo.gif)
 ## Getting Started
 ### Prerequisites
 1. ROS Melodic
