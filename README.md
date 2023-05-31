@@ -1,5 +1,7 @@
 # Object Localization and Relative Navigation on Gazebo
-An object detection and relative navigation scheme for our custom robot on Gazebo.
+An object detection and relative navigation scheme for a custom robot on Gazebo. The project was developed as senior design project on Fall/21 semester at Bogazici University.
+
+**Note**: Project report and presentation can be accessed under [resources](resources) directory.  
 
 ## Getting Started
 ### Prerequisites
